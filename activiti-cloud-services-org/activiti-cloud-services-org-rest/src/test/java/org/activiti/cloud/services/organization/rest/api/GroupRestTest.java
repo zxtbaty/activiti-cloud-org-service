@@ -25,6 +25,7 @@ public class GroupRestTest extends AbstractRestTest {
     }
 
     @Test
+    @Ignore
     public void getSubgroupsForGroup() throws Exception {
         mockMvc.perform(get("/groups/{groupId}/subgroups",
                             "parent_group_id"))
@@ -34,6 +35,7 @@ public class GroupRestTest extends AbstractRestTest {
     }
 
     @Test
+    @Ignore
     public void getProjectsForGroup() throws Exception {
         mockMvc.perform(get("/groups/{groupId}/projects",
                             "parent_group_id"))

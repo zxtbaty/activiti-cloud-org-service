@@ -26,8 +26,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
@@ -42,6 +42,7 @@ public abstract class AbstractRestTest {
     public static final String PROJECT_B_ID = "projectB_id";
     public static final String PROCESS_MODEL_ID = "processModel_id";
     public static final String PROCESS_MODEL_REF_ID = "processModel_refId";
+    public static final String PROCESS_MODEL_NAME = "processModel_name";
 
     MockMvc mockMvc;
     private HttpMessageConverter mappingJackson2HttpMessageConverter;
@@ -82,6 +83,7 @@ public abstract class AbstractRestTest {
         Project projectB = new Project(PROJECT_B_ID);
 
         Model processModel = new Model(PROCESS_MODEL_ID,
+                                       PROCESS_MODEL_NAME,
                                        Model.ModelType.PROCESS_MODEL,
                                        PROCESS_MODEL_REF_ID);
         models.add(processModel);
@@ -107,7 +109,9 @@ public abstract class AbstractRestTest {
     protected String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
         this.mappingJackson2HttpMessageConverter.write(
-                o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
+                o,
+                MediaType.APPLICATION_JSON,
+                mockHttpOutputMessage);
         return mockHttpOutputMessage.getBodyAsString();
     }
 

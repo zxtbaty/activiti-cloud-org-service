@@ -28,6 +28,41 @@
   <name>Activiti Cloud Services :: Organization REST</name>
   <description>Activiti Services Organization REST</description>
 
+  <!--<dependencyManagement>-->
+    <!--<dependencies>-->
+      <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-contract-dependencies</artifactId>-->
+        <!--<version>${spring-cloud-contract.version}</version>-->
+        <!--<type>pom</type>-->
+        <!--<scope>import</scope>-->
+      <!--</dependency>-->
+    <!--</dependencies>-->
+  <!--</dependencyManagement>-->
+
+
+  <!--<build>-->
+    <!--<plugins>-->
+      <!--<plugin>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-contract-maven-plugin</artifactId>-->
+        <!--<version>${spring-cloud-contract.version}</version>-->
+        <!--<extensions>true</extensions>-->
+        <!--<configuration>-->
+          <!--<baseClassForTests>org.activiti.cloud.services.process.model.rest.api.ProcessModelRestContractTest</baseClassForTests>-->
+          <!--<basePackageForTests>org.activiti.cloud.services.process.model.rest.api</basePackageForTests>-->
+        <!--</configuration>-->
+        <!--<dependencies>-->
+          <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-contract-verifier</artifactId>-->
+            <!--<version>${spring-cloud-contract.version}</version>-->
+          <!--</dependency>-->
+        <!--</dependencies>-->
+      <!--</plugin>-->
+    <!--</plugins>-->
+  <!--</build>-->
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
@@ -52,12 +87,12 @@
     <dependency>
       <groupId>org.activiti.cloud</groupId>
       <artifactId>activiti-cloud-services-org-jpa</artifactId>
-      <version>${version.activiti.cloud}</version>
+      <version>7-201711-EA-lucian_1559_configurations_activiti_cloud_org_service-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.activiti.cloud</groupId>
       <artifactId>activiti-cloud-services-org-core</artifactId>
-      <version>${version.activiti.cloud}</version>
+      <version>7-201711-EA-lucian_1559_configurations_activiti_cloud_org_service-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.hateoas</groupId>
@@ -162,6 +197,22 @@
       <artifactId>spring-restdocs-mockmvc</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-contract-wiremock</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
 </project>

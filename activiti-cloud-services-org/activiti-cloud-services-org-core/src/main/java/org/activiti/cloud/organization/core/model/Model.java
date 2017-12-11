@@ -18,9 +18,13 @@ package org.activiti.cloud.organization.core.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import org.activiti.cloud.organization.core.rest.resource.EntityWithRestResource;
+import org.activiti.cloud.organization.core.rest.resource.RestResource;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
@@ -28,22 +32,34 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
  * Model model entity
  */
 @Entity
+@EntityWithRestResource
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(NON_NULL)
 public class Model {
 
     @Id
     private String id;
+
     private ModelType type;
+
     private String refId;
+
+    @Transient
+    @JsonUnwrapped
+    @RestResource(
+            path = "/v1/{#name}/{#id}",
+            resourceIdField = "refId",
+            resourceKeyField = "type")
+    private ModelData data;
 
     public Model() { // for JPA
     }
 
-    public Model(String id, ModelType type, String refId) {
+    public Model(String id, String name, ModelType type, String refId) {
         this.id = id;
         this.type = type;
         this.refId = refId;
+        this.data = new ModelData(refId, name);
     }
 
     public String getId() {
@@ -68,6 +84,14 @@ public class Model {
 
     public void setRefId(String refId) {
         this.refId = refId;
+    }
+
+    public ModelData getData() {
+        return data;
+    }
+
+    public void setData(ModelData data) {
+        this.data = data;
     }
 
     public enum ModelType {
