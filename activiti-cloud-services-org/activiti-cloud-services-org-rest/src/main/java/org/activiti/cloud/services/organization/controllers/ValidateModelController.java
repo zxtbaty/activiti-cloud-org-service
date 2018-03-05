@@ -16,15 +16,19 @@
 
 package org.activiti.cloud.services.organization.controllers;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Optional;
 
 import org.activiti.cloud.organization.core.model.Model;
 import org.activiti.cloud.organization.core.rest.context.RestContext;
 import org.activiti.cloud.organization.core.rest.context.RestContextProvider;
+import org.activiti.cloud.organization.core.rest.context.RestResourceContextItem;
 import org.activiti.cloud.organization.core.service.RestClientService;
 import org.activiti.cloud.services.organization.assemblers.ValidationErrorResourceAssembler;
 import org.activiti.cloud.services.organization.jpa.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,11 +37,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.activiti.cloud.organization.core.model.Model.ModelType.PROCESS_MODEL;
 import static org.activiti.cloud.services.organization.config.RepositoryRestConfig.API_VERSION;
 
 @RestController
-@RequestMapping(value = API_VERSION + "/validate")
+@RequestMapping(value = API_VERSION)
 public class ValidateModelController {
 
     private final RestClientService restClientService;
@@ -57,21 +60,34 @@ public class ValidateModelController {
         this.validationErrorResourceAssembler = validationErrorResourceAssembler;
     }
 
-    @RequestMapping(value = "/{modelId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/models/{modelId}/validate", method = RequestMethod.POST)
     @ResponseBody
     public String validateModel(@PathVariable(value = "modelId") String modelId,
-                                @RequestParam("file") MultipartFile content) {
+                                @RequestParam("file") MultipartFile content) throws IOException {
 
-        // todo refactor this to a service separately
-        final Optional<Model> model = modelRepository.findById(modelId);
+        Optional<Model> model = modelRepository.findById(modelId);
         if (!model.isPresent()) {
-            // todo handle missing model exception
+            throw new ResourceNotFoundException();
         }
 
-        // call repository for model
-        final String url = contextProvider.getContext(RestContext.ACTIVITI).getResource(PROCESS_MODEL).getUrl();
+        return validateModel(model.get(),
+                             content);
+    }
 
-        return restClientService.validateModel(url,
-                                               content);
+    private String validateModel(Model processModel,
+                                 MultipartFile multipartFile) throws IOException {
+        // todo refactor this to a service separately
+        final RestResourceContextItem restContextItem = contextProvider
+                .getContext(RestContext.ACTIVITI)
+                .getResource(processModel.getType());
+        return restClientService
+                .validateModel(new StringBuilder(restContextItem.getUrl())
+                                       .append(API_VERSION)
+                                       .append("/")
+                                       .append(restContextItem.getName())
+                                       .append("/validate")
+                                       .toString(),
+                               multipartFile.getOriginalFilename(),
+                               multipartFile.getBytes());
     }
 }

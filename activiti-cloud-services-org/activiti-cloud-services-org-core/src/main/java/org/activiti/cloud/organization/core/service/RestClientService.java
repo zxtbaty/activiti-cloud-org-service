@@ -19,6 +19,7 @@ package org.activiti.cloud.organization.core.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -85,14 +85,22 @@ public class RestClientService {
     /**
      * Make the rest call to validate a model
      * @param restResourceUrl the url of the rest resource
-     * @param content multipart form data representing the model to be validated
+     * @param modelFilename model filename to be validated
+     * @param modelContent model content  to be validated
      * @return the resource as json string
      */
     public String validateModel(String restResourceUrl,
-                                MultipartFile content) {
+                                String modelFilename,
+                                byte[] modelContent) {
         MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
         bodyMap.add("file",
-                    content);
+                    new ByteArrayResource(modelContent) {
+                        @Override
+                        public String getFilename() {
+                            return modelFilename;
+                        }
+                    });
+
         log.trace("Validating rest resource using URL " + restResourceUrl);
 
         return restTemplate.exchange(restResourceUrl,
