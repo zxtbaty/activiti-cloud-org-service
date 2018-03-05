@@ -22,5 +22,9 @@
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-rest-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.activiti.cloud</groupId>
+      <artifactId>activiti-cloud-services-process-model-services</artifactId>
+    </dependency>
   </dependencies>
 </project>

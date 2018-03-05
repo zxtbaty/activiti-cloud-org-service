@@ -23,7 +23,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -80,10 +83,42 @@ public class RestClientService {
     }
 
     /**
+     * Make the rest call to validate a model
+     * @param restResourceUrl the url of the rest resource
+     * @param content multipart form data representing the model to be validated
+     * @return the resource as json string
+     */
+    public String validateModel(String restResourceUrl,
+                                MultipartFile content) {
+        MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+        bodyMap.add("file",
+                    content);
+        log.trace("Validating rest resource using URL " + restResourceUrl);
+
+        return restTemplate.exchange(restResourceUrl,
+                                     POST,
+                                     new HttpEntity<>(bodyMap,
+                                                      multipartFormData()),
+                                     String.class
+        )
+                .getBody();
+    }
+
+    /**
+     * Create and get simple http header for multipart form data request.
+     * @return the created http headers
+     */
+    private HttpHeaders multipartFormData() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        return headers;
+    }
+
+    /**
      * Create and get simple http header for json request.
      * @return the created http headers
      */
-    protected HttpHeaders jsonHeaders() {
+    private HttpHeaders jsonHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
