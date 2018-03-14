@@ -44,10 +44,11 @@ public class Group {
 
     @ManyToOne
     private Group parent;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Group> subgroups;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Project> projects;
 
     public Group() {    // for JPA

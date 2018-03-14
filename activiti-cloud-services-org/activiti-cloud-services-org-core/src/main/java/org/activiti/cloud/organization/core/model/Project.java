@@ -17,6 +17,7 @@
 package org.activiti.cloud.organization.core.model;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -37,10 +38,13 @@ public class Project {
 
     @ManyToOne
     private Group group;
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Model> models;
+
     @Id
     private String id;
+
     private String name;
 
     public Project() {  // for JPA
