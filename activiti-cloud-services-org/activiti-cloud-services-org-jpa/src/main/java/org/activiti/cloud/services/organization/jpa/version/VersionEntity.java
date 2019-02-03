@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Alfresco, Inc. and/or its affiliates.
+ * Copyright 2019 Alfresco, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package org.activiti.cloud.organization;
+package org.activiti.cloud.services.organization.jpa.version;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
+/**
+ * Interface for version entity
+ */
+public interface VersionEntity<T extends VersionedEntity> {
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
-@DirtiesContext
-public class ApplicationTest {
+    void setVersionIdentifier(VersionIdentifier versionIdentifier);
 
-    @Test
-    public void contextLoads() {
-    }
+    void setVersionedEntity(T versionedEntity);
+
+    String getVersion();
 }

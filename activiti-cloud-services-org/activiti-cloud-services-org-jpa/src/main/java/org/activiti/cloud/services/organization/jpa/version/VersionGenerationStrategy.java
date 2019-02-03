@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Alfresco, Inc. and/or its affiliates.
+ * Copyright 2019 Alfresco, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.activiti.cloud.services.organization.jpa.version;
 
-package org.activiti.cloud.organization;
+/**
+ * Interface for a version generation strategy
+ */
+public interface VersionGenerationStrategy {
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
-@DirtiesContext
-public class ApplicationTest {
-
-    @Test
-    public void contextLoads() {
-    }
+    /**
+     * Generate the next version relative to the given version.
+     * @param version the version to increment
+     * @return the generated version
+     */
+    String generateNextVersion(String version);
 }
